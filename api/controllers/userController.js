@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken');
 
 exports.register_user = async (req, res) => {
     try {
-        const { email, password } = req.body
+        const { email, password, name } = req.body
         const hashedPassword = await bcrypt.hash(password, 10)
-        const user = await new User({ email, password: hashedPassword, role: 'user' })
+        const user = await new User({ email, password: hashedPassword, name, role: 'user' })
         await user.save()
         res.send(user)
     } catch (err) {
@@ -35,17 +35,6 @@ exports.login_user = async (req, res) => {
         res.send(err)
     }
 }
-
-exports.protect = async (req, res, next) => {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(token, 'secretKey');
-        req.user = decoded;
-        next();
-    } catch (err) {
-        res.send({ message: 'Not authorized' });
-    }
-};
 
 
 exports.get_all_users = async (req, res) => {

@@ -12,9 +12,6 @@ exports.get_all_quizzes = async (req, res) => {
 
 exports.create_quiz = async (req, res) => {
     try {
-        if (!req.user) {
-            return res.status(401).json({ message: 'Not authorized' });
-        }   
         const quiz = new Quiz(req.body)
         await quiz.save()
         res.send(quiz)
