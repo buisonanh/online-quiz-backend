@@ -3,7 +3,7 @@ const Question = require('../models/questionModel');
 
 exports.get_all_quizzes = async (req, res) => {
     try {
-        quizzes = await Quiz.find({})
+        const quizzes = await Quiz.find({})
         res.send(quizzes)
     } catch (err) {
         res.send(err)
@@ -32,7 +32,7 @@ exports.delete_all_quizzes = async (req, res) => {
 
 exports.get_all_quizzes_by_user_id = async (req, res) => {
     try {
-        quizzes = await Quiz.find({ userId: req.params.userId })
+        const quizzes = await Quiz.find({ userId: req.params.userId })
         res.send(quizzes)
     } catch (err) {
         res.send(err)
@@ -70,6 +70,21 @@ exports.delete_quiz_by_id = async (req, res) => {
         await Question.deleteMany({ quiz_id: quizId });
 
         res.send('Quiz and associated questions are deleted');
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+exports.search_quiz = async (req, res) => {
+    try {
+        const keyword = req.query.keyword || '';
+        const quizzes = await Quiz.find({
+            $or: [
+                { title: new RegExp(keyword, 'i') },
+                { description: new RegExp(keyword, 'i') }
+            ]
+        });
+        res.send(quizzes);
     } catch (err) {
         res.status(500).send(err);
     }

@@ -23,7 +23,10 @@ const appRoutes = (app) => {
     app.route('/quizzes')
         .get(quizController.get_all_quizzes)
         .post(quizController.create_quiz)
-        .delete( quizController.delete_all_quizzes)
+        .delete(quizController.delete_all_quizzes)
+
+    app.route('/quizzes/search')
+        .get(quizController.search_quiz)
     
     app.route('/quizzes/:userId')
         .get(quizController.get_all_quizzes_by_user_id)
@@ -32,6 +35,7 @@ const appRoutes = (app) => {
         .get(quizController.get_quiz_by_id)
         .put( quizController.update_quiz)
         .delete( quizController.delete_quiz_by_id)
+    
 
     // Questions
     app.route('/questions/:quizId')
